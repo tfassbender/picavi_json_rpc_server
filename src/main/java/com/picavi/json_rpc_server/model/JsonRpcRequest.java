@@ -11,6 +11,11 @@ public class JsonRpcRequest {
 		
 	}
 	
+	@Override
+	public String toString() {
+		return "JsonRpcRequest [jsonRpc=" + jsonRpc + ", method=" + method + ", params=" + params + ", id=" + id + "]";
+	}
+	
 	public String getJsonRpc() {
 		return jsonRpc;
 	}

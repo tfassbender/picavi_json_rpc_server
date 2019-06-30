@@ -9,6 +9,11 @@ public class PicklistRequestParameters {
 		
 	}
 	
+	@Override
+	public String toString() {
+		return "PicklistRequestParameters [sessionId=" + sessionId + ", pickingListIdent=" + pickingListIdent + "]";
+	}
+	
 	public PicklistRequestParameters(String sessionId, String pickingListIdent) {
 		this.sessionId = sessionId;
 		this.pickingListIdent = pickingListIdent;

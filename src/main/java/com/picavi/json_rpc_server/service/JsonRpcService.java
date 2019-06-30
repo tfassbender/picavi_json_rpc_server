@@ -11,6 +11,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.picavi.json_rpc_server.backend.LoginException;
 import com.picavi.json_rpc_server.backend.OrderPicking;
 import com.picavi.json_rpc_server.backend.SystemAutentification;
@@ -26,6 +29,8 @@ import com.picavi.json_rpc_server.model.PicklistRequestParameters;
 @Path("/")
 public class JsonRpcService {
 	
+	private static final Logger LOGGER = LogManager.getLogger(JsonRpcService.class);
+	
 	private static final String jsonRPC = "2.0";
 	
 	@POST
@@ -33,6 +38,8 @@ public class JsonRpcService {
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response processRequest(JsonRpcRequest request) {
+		LOGGER.info("received (synchrone) request: {}", request);
+		
 		//execute the requested method
 		switch (request.getMethod()) {
 			case "system.login":
@@ -42,7 +49,9 @@ public class JsonRpcService {
 			case "orderPicking.getPickingList":
 				return processGetPickingList(request);
 		}
+		
 		//if the method is none of the above return an error
+		LOGGER.warn("the request could not be processed, because the method name is unknown: {}", request.getMethod());
 		return createMethodNotFoundErrorResponse(request.getId(), request.getMethod());
 	}
 	
@@ -51,6 +60,8 @@ public class JsonRpcService {
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response processRequestAsync(JsonRpcRequest request) {
+		LOGGER.info("received (asynchrone) request: {}", request);
+		
 		//execute the requested method
 		try {
 			switch (request.getMethod()) {
@@ -63,15 +74,19 @@ public class JsonRpcService {
 			}
 		}
 		catch (InterruptedException | ExecutionException e) {
-			e.printStackTrace();
+			LOGGER.error("The asynchrone execution of the request failed", e);
+			
 			//return an unknown error because this exceptions should never occur
 			return createErrorResponse(request.getId());
 		}
+		
 		//if the method is none of the above return an error
+		LOGGER.warn("the request could not be processed, because the method name is unknown: {}", request.getMethod());
 		return createMethodNotFoundErrorResponse(request.getId(), request.getMethod());
 	}
 	
 	private Response processLogin(JsonRpcRequest request) {
+		LOGGER.info("processing login request");
 		//get the login information
 		Credentials credentials;
 		try {
@@ -83,6 +98,7 @@ public class JsonRpcService {
 		
 		String user = credentials.getUser();
 		String password = credentials.getPassword();
+		
 		
 		//login the user
 		SystemAutentification systemProcessor = SystemAutentification.getInstance();
@@ -106,6 +122,8 @@ public class JsonRpcService {
 	}
 	
 	private Response processLogout(JsonRpcRequest request) {
+		LOGGER.info("Processing logout request");
+		
 		//get the information form the request
 		String sessionId;
 		try {
@@ -131,6 +149,8 @@ public class JsonRpcService {
 	}
 	
 	private Response processGetPickingList(JsonRpcRequest request) {
+		LOGGER.info("Processing picklist request");
+		
 		//get the information from the request
 		PicklistRequestParameters parameters;
 		try {

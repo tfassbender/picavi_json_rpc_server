@@ -22,6 +22,12 @@ public class Pickline {
 		this.status = status;
 	}
 	
+	@Override
+	public String toString() {
+		return "Pickline [ident=" + ident + ", location=" + location + ", item=" + item + ", quantity=" + quantity + ", unit=" + unit + ", status="
+				+ status + "]";
+	}
+	
 	public String getIdent() {
 		return ident;
 	}

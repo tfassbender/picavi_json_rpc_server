@@ -9,6 +9,11 @@ public class JsonRpcLoginAnswer {
 		
 	}
 	
+	@Override
+	public String toString() {
+		return "JsonRpcLoginAnswer [sessionId=" + sessionId + ", configuration=" + configuration + "]";
+	}
+	
 	public JsonRpcLoginAnswer(String sessionId, Configuration configuration) {
 		this.sessionId = sessionId;
 		this.configuration = configuration;

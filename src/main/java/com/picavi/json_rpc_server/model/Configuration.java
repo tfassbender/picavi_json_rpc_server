@@ -9,6 +9,11 @@ public class Configuration {
 		
 	}
 	
+	@Override
+	public String toString() {
+		return "Configuration [language=" + language + ", handedness=" + handedness + "]";
+	}
+	
 	public Configuration(String language, String handedness) {
 		this.language = language;
 		this.handedness = handedness;

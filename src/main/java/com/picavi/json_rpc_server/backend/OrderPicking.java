@@ -1,9 +1,14 @@
 package com.picavi.json_rpc_server.backend;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.picavi.json_rpc_server.model.Pickline;
 import com.picavi.json_rpc_server.model.Picklist;
 
 public class OrderPicking {
+	
+	private static final Logger LOGGER = LogManager.getLogger(OrderPicking.class);
 	
 	private static OrderPicking instance;
 	
@@ -25,6 +30,7 @@ public class OrderPicking {
 	 * Get a picklist from the database
 	 */
 	public Picklist getPickList(String sessionId, String pickingListIdent) {
+		LOGGER.info("Creating picklist; sessionId: {}, ident: {}", sessionId, pickingListIdent);
 		//get a picklist from a database or any other cool solution...
 		
 		//or return a dummy picklist because there is no database...

@@ -12,6 +12,11 @@ public class Picklist {
 		
 	}
 	
+	@Override
+	public String toString() {
+		return "Picklist [ident=" + ident + ", lines=" + lines + "]";
+	}
+	
 	public String getIdent() {
 		return ident;
 	}

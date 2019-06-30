@@ -11,6 +11,11 @@ public class Credentials {
 		
 	}
 	
+	@Override
+	public String toString() {
+		return "Credentials [user=" + user + ", password=" + password + ", station=" + station + ", deviceIdent=" + deviceIdent + "]";
+	}
+	
 	public String getUser() {
 		return user;
 	}
