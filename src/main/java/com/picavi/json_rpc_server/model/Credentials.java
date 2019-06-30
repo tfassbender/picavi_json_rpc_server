@@ -11,6 +11,13 @@ public class Credentials {
 		
 	}
 	
+	public Credentials(String user, String password, String station, String deviceIdent) {
+		this.user = user;
+		this.password = password;
+		this.station = station;
+		this.deviceIdent = deviceIdent;
+	}
+	
 	@Override
 	public String toString() {
 		return "Credentials [user=" + user + ", password=" + password + ", station=" + station + ", deviceIdent=" + deviceIdent + "]";
