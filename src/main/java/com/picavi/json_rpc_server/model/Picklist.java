@@ -1,5 +1,6 @@
 package com.picavi.json_rpc_server.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Picklist {
@@ -24,4 +25,17 @@ public class Picklist {
 	public void setLines(List<Pickline> lines) {
 		this.lines = lines;
 	}
+	public void addLine(Pickline line) {
+		if (lines == null) {
+			lines = new ArrayList<Pickline>();
+		}
+		lines.add(line);
+	}
+	public void addLines(List<Pickline> lines) {
+		if (this.lines == null) {
+			this.lines = new ArrayList<Pickline>(lines.size());
+		}
+		this.lines.addAll(lines);
+	}
+	
 }

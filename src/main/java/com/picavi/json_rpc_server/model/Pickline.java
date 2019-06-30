@@ -7,9 +7,19 @@ public class Pickline {
 	private String item;
 	private double quantity;
 	private String unit;
+	private String status;
 	
 	public Pickline() {
 		
+	}
+	
+	public Pickline(String ident, String location, String item, double quantity, String unit, String status) {
+		this.ident = ident;
+		this.location = location;
+		this.item = item;
+		this.quantity = quantity;
+		this.unit = unit;
+		this.status = status;
 	}
 	
 	public String getIdent() {
@@ -45,5 +55,12 @@ public class Pickline {
 	}
 	public void setUnit(String unit) {
 		this.unit = unit;
+	}
+	
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 }
