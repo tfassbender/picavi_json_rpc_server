@@ -65,6 +65,10 @@ public class JsonRpcError {
 	}
 	
 	public static JsonRpcError fromParameters(Object params) {
+		if (params == null) {
+			return null;
+		}
+		
 		//assume the params Object is a Map, because it's deserialized this way
 		@SuppressWarnings("unchecked")
 		Map<String, Object> parameterMap = (Map<String, Object>) params;

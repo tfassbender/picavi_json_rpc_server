@@ -20,6 +20,7 @@ import com.picavi.json_rpc_server.backend.SystemAutentification;
 import com.picavi.json_rpc_server.model.Configuration;
 import com.picavi.json_rpc_server.model.Credentials;
 import com.picavi.json_rpc_server.model.JsonRpcError;
+import com.picavi.json_rpc_server.model.JsonRpcErrorResponse;
 import com.picavi.json_rpc_server.model.JsonRpcLoginAnswer;
 import com.picavi.json_rpc_server.model.JsonRpcRequest;
 import com.picavi.json_rpc_server.model.JsonRpcResponse;
@@ -112,7 +113,7 @@ public class JsonRpcService {
 		}
 		
 		//create the response
-		JsonRpcResponse response = createPositiveResponse(request.getId());
+		JsonRpcResponse response = createResponse(request.getId());
 		response.setResult(new JsonRpcLoginAnswer(sessionId, new Configuration("DE", "right")));
 		
 		LOGGER.info("Sending response to login request: {}", response);
@@ -140,7 +141,7 @@ public class JsonRpcService {
 		boolean logoutSucessful = systemProcessor.logout(sessionId);
 		
 		//create the response
-		JsonRpcResponse response = createPositiveResponse(request.getId());
+		JsonRpcResponse response = createResponse(request.getId());
 		response.setResult(Boolean.valueOf(logoutSucessful));
 		
 		LOGGER.info("Sending response to logout request: {}", response);
@@ -170,7 +171,7 @@ public class JsonRpcService {
 		Picklist picklist = orderPicking.getPickList(sessionId, pickingListIdent);
 		
 		//create the response
-		JsonRpcResponse response = createPositiveResponse(request.getId());
+		JsonRpcResponse response = createResponse(request.getId());
 		response.setResult(picklist);
 		
 		LOGGER.info("Sending response to getPickList request: {}", response);
@@ -182,44 +183,58 @@ public class JsonRpcService {
 	/**
 	 * Creates a positive response with a given id, but without content
 	 */
-	private JsonRpcResponse createPositiveResponse(String id) {
+	private JsonRpcResponse createResponse(String id) {
 		JsonRpcResponse response = new JsonRpcResponse();
 		response.setId(id);
 		response.setJsonRpc(jsonRPC);
-		response.setError(JsonRpcError.OK);
 		return response;
 	}
 	
+	/**
+	 * Create a default error response (HTTP code is 200, but the returned JsonRpcResponse contains a JsonRpcError with an error-code of -10000)
+	 */
 	private Response createErrorResponse(String id) {
-		JsonRpcResponse response = createEmptyErrorResponse(id);
+		JsonRpcErrorResponse response = createEmptyErrorResponse(id);
 		response.setError(new JsonRpcError(-10000, "Unknown error occured", null));
 		
 		return Response.status(Status.OK).entity(response).build();
 	}
-	
+
+	/**
+	 * Create a response that informs about problems on login request
+	 */
 	private Response createLoginErrorResponse(String id) {
-		JsonRpcResponse response = createEmptyErrorResponse(id);
+		JsonRpcErrorResponse response = createEmptyErrorResponse(id);
 		response.setError(new JsonRpcError(-10100, "Login was not successful", null));
 		
 		return Response.status(Status.OK).entity(response).build();
 	}
 	
+	/**
+	 * Create a response that informs about illegal or unexpected parameters in a request
+	 */
 	private Response createIllegalParameterErrorResponse(String id, Object parameters) {
-		JsonRpcResponse response = createEmptyErrorResponse(id);
+		JsonRpcErrorResponse response = createEmptyErrorResponse(id);
 		response.setError(new JsonRpcError(-10200, "Unexpected parameters in request", parameters));
 		
 		return Response.status(Status.OK).entity(response).build();
 	}
 	
+	/**
+	 * Create a response that informs that the requested method (the method parameter in the request) is unknown
+	 */
 	private Response createMethodNotFoundErrorResponse(String id, String methodName) {
-		JsonRpcResponse response = createEmptyErrorResponse(id);
+		JsonRpcErrorResponse response = createEmptyErrorResponse(id);
 		response.setError(new JsonRpcError(-10300, "Unknown method", methodName));
 		
 		return Response.status(Status.OK).entity(response).build();
 	}
 	
-	private JsonRpcResponse createEmptyErrorResponse(String id) {
-		JsonRpcResponse response = new JsonRpcResponse();
+	/**
+	 * Create an empty response with only an id and the default jsonRpc fields set
+	 */
+	private JsonRpcErrorResponse createEmptyErrorResponse(String id) {
+		JsonRpcErrorResponse response = new JsonRpcErrorResponse();
 		response.setId(id);
 		response.setJsonRpc(jsonRPC);
 		return response;

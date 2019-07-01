@@ -1,18 +1,18 @@
 package com.picavi.json_rpc_server.model;
 
-public class JsonRpcResponse {
+public class JsonRpcErrorResponse {
 	
 	private String jsonRpc;
-	private Object result;
+	private Object error;
 	private String id;
 	
-	public JsonRpcResponse() {
+	public JsonRpcErrorResponse() {
 		
 	}
 	
 	@Override
 	public String toString() {
-		return "JsonRpcResponse [jsonRpc=" + jsonRpc + ", result=" + result + ", id=" + id + "]";
+		return "JsonRpcErrorResponse [jsonRpc=" + jsonRpc + ", error=" + error + ", id=" + id + "]";
 	}
 	
 	public String getJsonRpc() {
@@ -22,11 +22,11 @@ public class JsonRpcResponse {
 		this.jsonRpc = jsonRpc;
 	}
 	
-	public Object getResult() {
-		return result;
+	public Object getError() {
+		return error;
 	}
-	public void setResult(Object result) {
-		this.result = result;
+	public void setError(Object error) {
+		this.error = error;
 	}
 	
 	public String getId() {
