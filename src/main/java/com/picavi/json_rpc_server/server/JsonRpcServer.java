@@ -15,7 +15,7 @@ public class JsonRpcServer {
 	private static final Logger LOGGER = LogManager.getLogger(JsonRpcServer.class);
 	
 	private static final String BASE_URI = "http://localhost:4711/";
-	private static final String BASE_PACKAGE = "rest.jersey.server.basics";
+	private static final String BASE_PACKAGE = "com.picavi.json_rpc_server.service";
 	
 	public static void main(String[] args) {
 		ResourceConfig config = new ResourceConfig().packages(BASE_PACKAGE);
@@ -33,5 +33,7 @@ public class JsonRpcServer {
 		//stop the server after the user has made an input
 		LOGGER.info("Stopping server\n\n\n");
 		server.stop(0);
+		
+		System.exit(0);
 	}
 }

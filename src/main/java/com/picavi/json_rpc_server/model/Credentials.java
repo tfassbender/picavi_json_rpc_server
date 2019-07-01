@@ -1,5 +1,7 @@
 package com.picavi.json_rpc_server.model;
 
+import java.util.Map;
+
 public class Credentials {
 	
 	private String user;
@@ -49,5 +51,24 @@ public class Credentials {
 	}
 	public void setDeviceIdent(String deviceIdent) {
 		this.deviceIdent = deviceIdent;
+	}
+	
+	public static Credentials fromParameters(Object params) {
+		//assume the params Object is a Map, because it's deserialized this way
+		@SuppressWarnings("unchecked")
+		Map<String, String> parameterMap = (Map<String, String>) params;
+		
+		//check whether the required fields are included
+		if (!parameterMap.containsKey("user")) {
+			throw new IllegalArgumentException("The required field \"user\" is not found in the parameters");
+		}
+		
+		Credentials credentials = new Credentials();
+		credentials.setUser(parameterMap.get("user"));
+		credentials.setPassword(parameterMap.get("password"));
+		credentials.setDeviceIdent(parameterMap.get("deviceIdent"));
+		credentials.setStation(parameterMap.get("station"));
+		
+		return credentials;
 	}
 }

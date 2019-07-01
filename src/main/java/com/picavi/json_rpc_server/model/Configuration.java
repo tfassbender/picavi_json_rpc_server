@@ -1,5 +1,7 @@
 package com.picavi.json_rpc_server.model;
 
+import java.util.Map;
+
 public class Configuration {
 	
 	private String language;
@@ -31,5 +33,13 @@ public class Configuration {
 	}
 	public void setHandedness(String handedness) {
 		this.handedness = handedness;
+	}
+	
+	public static Configuration fromParameters(Map<String, String> params) {
+		Configuration configuration = new Configuration();
+		configuration.setLanguage(params.get("language"));
+		configuration.setHandedness(params.get("handedness"));
+		
+		return configuration;
 	}
 }

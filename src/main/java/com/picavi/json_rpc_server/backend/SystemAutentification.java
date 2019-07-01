@@ -1,8 +1,5 @@
 package com.picavi.json_rpc_server.backend;
 
-import java.nio.charset.Charset;
-import java.util.Random;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -58,9 +55,12 @@ public class SystemAutentification {
 		//create a secure and well chosen session id here
 		
 		//or just create a random session id...
-		byte[] chars = new byte[20];
-		new Random().nextBytes(chars);
-		String generatedString = new String(chars, Charset.forName("UTF-8"));
-		return generatedString;
+		final String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+		final int length = 20;
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < length; i++) {
+			sb.append(chars.charAt((int) (Math.random() * chars.length())));
+		}
+		return sb.toString();
 	}
 }

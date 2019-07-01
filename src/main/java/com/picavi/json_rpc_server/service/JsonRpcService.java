@@ -34,8 +34,8 @@ public class JsonRpcService {
 	private static final String jsonRPC = "2.0";
 	
 	@POST
-	@Path("")
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Path("/")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response processRequest(JsonRpcRequest request) {
 		LOGGER.info("received (synchrone) request: {}", request);
@@ -56,8 +56,8 @@ public class JsonRpcService {
 	}
 	
 	@POST
-	@Path("async")
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Path("/async")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response processRequestAsync(JsonRpcRequest request) {
 		LOGGER.info("received (asynchrone) request: {}", request);
@@ -90,15 +90,16 @@ public class JsonRpcService {
 		//get the login information
 		Credentials credentials;
 		try {
-			credentials = (Credentials) request.getParams();
+			credentials = Credentials.fromParameters(request.getParams());
 		}
-		catch (ClassCastException cce) {
+		catch (ClassCastException | IllegalArgumentException e) {
+			LOGGER.warn("Parameters could not be parsed: {}; Type: {}; caused by: {}", request.getParams(),
+					request.getParams().getClass().getSimpleName(), e.getMessage());
 			return createIllegalParameterErrorResponse(request.getId(), request.getParams());
 		}
 		
 		String user = credentials.getUser();
 		String password = credentials.getPassword();
-		
 		
 		//login the user
 		SystemAutentification systemProcessor = SystemAutentification.getInstance();
@@ -111,11 +112,10 @@ public class JsonRpcService {
 		}
 		
 		//create the response
-		JsonRpcResponse response = new JsonRpcResponse();
-		response.setId(request.getId());
-		response.setJsonRpc(jsonRPC);
-		response.setError(JsonRpcError.OK);
+		JsonRpcResponse response = createPositiveResponse(request.getId());
 		response.setResult(new JsonRpcLoginAnswer(sessionId, new Configuration("DE", "right")));
+		
+		LOGGER.info("Sending response to login request: {}", response);
 		
 		//return the response
 		return Response.status(Status.OK).entity(response).build();
@@ -129,7 +129,9 @@ public class JsonRpcService {
 		try {
 			sessionId = (String) request.getParams();
 		}
-		catch (ClassCastException cce) {
+		catch (ClassCastException | IllegalArgumentException e) {
+			LOGGER.warn("Parameters could not be parsed: {}; Type: {}; caused by: {}", request.getParams(),
+					request.getParams().getClass().getSimpleName(), e.getMessage());
 			return createIllegalParameterErrorResponse(request.getId(), request.getParams());
 		}
 		
@@ -138,11 +140,10 @@ public class JsonRpcService {
 		boolean logoutSucessful = systemProcessor.logout(sessionId);
 		
 		//create the response
-		JsonRpcResponse response = new JsonRpcResponse();
-		response.setId(request.getId());
-		response.setJsonRpc(jsonRPC);
-		response.setError(JsonRpcError.OK);
+		JsonRpcResponse response = createPositiveResponse(request.getId());
 		response.setResult(Boolean.valueOf(logoutSucessful));
+		
+		LOGGER.info("Sending response to logout request: {}", response);
 		
 		//return the response
 		return Response.status(Status.OK).entity(response).build();
@@ -154,9 +155,11 @@ public class JsonRpcService {
 		//get the information from the request
 		PicklistRequestParameters parameters;
 		try {
-			parameters = (PicklistRequestParameters) request.getParams();
+			parameters = PicklistRequestParameters.fromParameters(request.getParams());
 		}
-		catch (ClassCastException cce) {
+		catch (ClassCastException | IllegalArgumentException e) {
+			LOGGER.warn("Parameters could not be parsed: {}; Type: {}; caused by: {}", request.getParams(),
+					request.getParams().getClass().getSimpleName(), e.getMessage());
 			return createIllegalParameterErrorResponse(request.getId(), request.getParams());
 		}
 		String sessionId = parameters.getSessionId();
@@ -167,14 +170,24 @@ public class JsonRpcService {
 		Picklist picklist = orderPicking.getPickList(sessionId, pickingListIdent);
 		
 		//create the response
-		JsonRpcResponse response = new JsonRpcResponse();
-		response.setId(request.getId());
-		response.setJsonRpc(jsonRPC);
-		response.setError(JsonRpcError.OK);
+		JsonRpcResponse response = createPositiveResponse(request.getId());
 		response.setResult(picklist);
+		
+		LOGGER.info("Sending response to getPickList request: {}", response);
 		
 		//return the picklist
 		return Response.status(Status.OK).entity(response).build();
+	}
+	
+	/**
+	 * Creates a positive response with a given id, but without content
+	 */
+	private JsonRpcResponse createPositiveResponse(String id) {
+		JsonRpcResponse response = new JsonRpcResponse();
+		response.setId(id);
+		response.setJsonRpc(jsonRPC);
+		response.setError(JsonRpcError.OK);
+		return response;
 	}
 	
 	private Response createErrorResponse(String id) {

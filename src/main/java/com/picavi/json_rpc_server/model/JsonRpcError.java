@@ -1,5 +1,7 @@
 package com.picavi.json_rpc_server.model;
 
+import java.util.Map;
+
 /**
  * Error codes:
  *
@@ -60,5 +62,22 @@ public class JsonRpcError {
 	}
 	public void setData(Object data) {
 		this.data = data;
+	}
+	
+	public static JsonRpcError fromParameters(Object params) {
+		//assume the params Object is a Map, because it's deserialized this way
+		@SuppressWarnings("unchecked")
+		Map<String, Object> parameterMap = (Map<String, Object>) params;
+		
+		JsonRpcError error = new JsonRpcError();
+		try {
+			error.setCode(Integer.parseInt((String) parameterMap.get("code")));
+		}
+		catch (NumberFormatException | NullPointerException e) {
+			error.setCode(0);
+		}
+		error.setMessage((String) parameterMap.get("message"));
+		error.setData(parameterMap.get("data"));
+		return error;
 	}
 }

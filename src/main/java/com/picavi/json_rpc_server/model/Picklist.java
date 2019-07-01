@@ -42,5 +42,4 @@ public class Picklist {
 		}
 		this.lines.addAll(lines);
 	}
-	
 }
