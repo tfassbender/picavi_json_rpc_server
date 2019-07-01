@@ -70,12 +70,7 @@ public class JsonRpcError {
 		Map<String, Object> parameterMap = (Map<String, Object>) params;
 		
 		JsonRpcError error = new JsonRpcError();
-		try {
-			error.setCode(Integer.parseInt((String) parameterMap.get("code")));
-		}
-		catch (NumberFormatException | NullPointerException e) {
-			error.setCode(0);
-		}
+		error.setCode((Integer) parameterMap.get("code"));
 		error.setMessage((String) parameterMap.get("message"));
 		error.setData(parameterMap.get("data"));
 		return error;
