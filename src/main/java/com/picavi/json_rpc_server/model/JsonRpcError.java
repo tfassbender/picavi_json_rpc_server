@@ -29,7 +29,7 @@ public class JsonRpcError {
 	public static final JsonRpcError OK = new JsonRpcError(0, "", null);
 	
 	public JsonRpcError() {
-		
+		//default constructor for JSON serialization
 	}
 	
 	@Override

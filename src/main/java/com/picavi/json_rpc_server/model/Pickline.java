@@ -10,7 +10,7 @@ public class Pickline {
 	private String status;
 	
 	public Pickline() {
-		
+		//default constructor for JSON serialization
 	}
 	
 	public Pickline(String ident, String location, String item, double quantity, String unit, String status) {

@@ -130,6 +130,12 @@
 				<version>2.4.3</version>
 				<configuration>
 					<finalName>Picavi_JsonRPC_server</finalName>
+
+					<!-- <createDependencyReducedPom>true</createDependencyReducedPom> <filters> 
+						<filter> <artifact>*:*</artifact> <excludes> <exclude>META-INF/*.SF</exclude> 
+						<exclude>META-INF/*.DSA</exclude> <exclude>META-INF/*.RSA</exclude> </excludes> 
+						</filter> </filters> -->
+
 				</configuration>
 				<executions>
 					<execution>
@@ -139,6 +145,8 @@
 						</goals>
 						<configuration>
 							<transformers>
+								<!-- <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" 
+									/> -->
 								<transformer
 									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 									<mainClass>com.picavi.json_rpc_server.server.JsonRpcServer</mainClass>

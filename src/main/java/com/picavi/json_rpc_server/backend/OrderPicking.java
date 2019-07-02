@@ -28,8 +28,11 @@ public class OrderPicking {
 	
 	/**
 	 * Get a picklist from the database
+	 * 
+	 * @throws PickingException
+	 *         A {@link PickingException} is not really thrown here because it's only a dummy implementation...
 	 */
-	public Picklist getPickList(String sessionId, String pickingListIdent) {
+	public Picklist getPickList(String sessionId, String pickingListIdent) throws PickingException {
 		LOGGER.info("Creating picklist; sessionId: {}, ident: {}", sessionId, pickingListIdent);
 		//get a picklist from a database or any other cool solution...
 		

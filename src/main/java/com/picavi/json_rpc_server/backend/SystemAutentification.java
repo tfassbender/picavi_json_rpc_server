@@ -42,7 +42,7 @@ public class SystemAutentification {
 	/**
 	 * Logout a user
 	 */
-	public boolean logout(String sessionId) {
+	public boolean logout(String sessionId) throws LoginException {
 		LOGGER.info("Logging out user; sessionId: {}", sessionId);
 		//do some secure logout stuff here
 		return true;

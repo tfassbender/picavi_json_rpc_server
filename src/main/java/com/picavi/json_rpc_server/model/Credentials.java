@@ -10,7 +10,7 @@ public class Credentials {
 	private String deviceIdent;
 	
 	public Credentials() {
-		
+		//default constructor for JSON serialization
 	}
 	
 	public Credentials(String user, String password, String station, String deviceIdent) {

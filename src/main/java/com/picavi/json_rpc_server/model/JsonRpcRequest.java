@@ -8,7 +8,7 @@ public class JsonRpcRequest {
 	private String id;
 	
 	public JsonRpcRequest() {
-		
+		//default constructor for JSON serialization
 	}
 	
 	@Override

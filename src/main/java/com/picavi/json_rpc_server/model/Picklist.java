@@ -9,7 +9,7 @@ public class Picklist {
 	private List<Pickline> lines;
 	
 	public Picklist() {
-		
+		//default constructor for JSON serialization
 	}
 	
 	@Override

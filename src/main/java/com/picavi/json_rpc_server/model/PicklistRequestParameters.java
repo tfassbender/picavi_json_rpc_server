@@ -8,7 +8,7 @@ public class PicklistRequestParameters {
 	private String pickingListIdent;
 	
 	public PicklistRequestParameters() {
-		
+		//default constructor for JSON serialization
 	}
 	
 	@Override

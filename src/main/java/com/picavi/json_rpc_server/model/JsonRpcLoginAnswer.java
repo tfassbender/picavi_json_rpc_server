@@ -8,7 +8,7 @@ public class JsonRpcLoginAnswer {
 	private Configuration configuration;
 	
 	public JsonRpcLoginAnswer() {
-		
+		//default constructor for JSON serialization
 	}
 	
 	@Override

@@ -7,7 +7,7 @@ public class JsonRpcResponse {
 	private String id;
 	
 	public JsonRpcResponse() {
-		
+		//default constructor for JSON serialization
 	}
 	
 	@Override

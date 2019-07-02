@@ -8,7 +8,7 @@ public class Configuration {
 	private String handedness;
 	
 	public Configuration() {
-		
+		//default constructor for JSON serialization
 	}
 	
 	@Override
