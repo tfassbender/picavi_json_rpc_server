@@ -26,30 +26,31 @@ import com.picavi.json_rpc_server.model.JsonRpcLoginAnswer;
 import com.picavi.json_rpc_server.model.JsonRpcRequest;
 import com.picavi.json_rpc_server.model.JsonRpcResponse;
 import com.picavi.json_rpc_server.test_utils.TestUtils;
+import com.sun.net.httpserver.HttpServer;
 
 class JsonRpcServerTest {
 	
-	private static Thread serverThread;
+	private static HttpServer server;
 	
 	@BeforeAll
-	public static void startServer() {
-		serverThread = JsonRpcServer.startTestServer();
+	public static void startServer() throws InterruptedException {
+		server = JsonRpcServer.startTestServer();
 	}
 	
 	@AfterAll
 	public static void stopServer() {
-		serverThread.interrupt();
+		server.stop(0);
 	}
 	
 	@Test
 	void test() throws IOException {
-		//CREATE
+		// CREATE
 		
-		//create a login request
+		// create a login request
 		final String id = TestUtils.getRandomId();
 		JsonRpcRequest loginRequest = TestUtils.createLoginRequest(id);
 		
-		//create the HTTP request from the login request
+		// create the HTTP request from the login request
 		ObjectWriter ow = new ObjectMapper().writer();
 		String json = null;
 		try {
@@ -59,15 +60,15 @@ class JsonRpcServerTest {
 			fail("Couldn't parse request object");
 		}
 		
-		//send the request to the server via POST
+		// send the request to the server via POST
 		Client client = ClientBuilder.newClient();
 		WebTarget webTarget = client.target(JsonRpcServer.BASE_URI).path("/");
 		
-		//ACT
+		// ACT
 		Response response = webTarget.request().accept(MediaType.APPLICATION_JSON).post(Entity.entity(json, MediaType.APPLICATION_JSON));
 		int responseCode = response.getStatus();
 		
-		//check whether the response was OK or an error code
+		// check whether the response was OK or an error code
 		JsonRpcResponse rpcResponse = null;
 		if (responseCode != Response.Status.OK.getStatusCode()) {
 			fail("HTTP response code was not 200 but " + responseCode);
@@ -76,12 +77,12 @@ class JsonRpcServerTest {
 			rpcResponse = TestUtils.parseResponse(response);
 		}
 		
-		//ASSERT
+		// ASSERT
 		JsonRpcLoginAnswer expectedResponse = new JsonRpcLoginAnswer("unknown session", new Configuration("DE", "right"));
 		
 		assertNotNull(rpcResponse);
 		assertTrue(rpcResponse.getResult() instanceof JsonRpcLoginAnswer);
-		//only compare the configuration because the sessionId is randomly generated
+		// only compare the configuration because the sessionId is randomly generated
 		assertEquals(expectedResponse.getConfiguration(), ((JsonRpcLoginAnswer) rpcResponse.getResult()).getConfiguration());
 	}
 }

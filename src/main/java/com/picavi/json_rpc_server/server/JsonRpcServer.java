@@ -50,33 +50,11 @@ public abstract class JsonRpcServer {
 	
 	/**
 	 * Starts a server in a new thread so it can be stopped by interrupting the thread (for testing purposes)
+	 * @return 
 	 */
 	@VisibleForTesting
-	/*private*/ static Thread startTestServer() {
-		Thread thread = new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				HttpServer server = startServer();
-				
-				while (!Thread.currentThread().isInterrupted()) {
-					try {
-						Thread.sleep(10);//wait till the thread gets interrupted
-					}
-					catch (InterruptedException ie) {
-						//set the interrupted flag that was reset by catching the exception
-						Thread.currentThread().interrupt();
-					}
-				}
-				
-				//stop the server after the thread got interrupted
-				server.stop(0);
-			}
-		}, "PicaviServerThread");
-		
-		//start the server thread
-		thread.start();
-		
-		return thread;
+	/*private*/ static HttpServer startTestServer() {
+		HttpServer server = startServer();
+		return server;
 	}
 }
