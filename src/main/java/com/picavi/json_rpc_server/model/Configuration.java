@@ -68,7 +68,10 @@ public class Configuration {
 		this.handedness = handedness;
 	}
 	
-	public static Configuration fromParameters(Map<String, String> params) {
+	public static Configuration fromParameters(Object parameters) {
+		@SuppressWarnings("unchecked")
+		Map<String, String> params = (Map<String, String>) parameters;
+		
 		Configuration configuration = new Configuration();
 		configuration.setLanguage(params.get("language"));
 		configuration.setHandedness(params.get("handedness"));

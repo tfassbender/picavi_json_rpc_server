@@ -12,6 +12,8 @@ public class Picklist {
 	
 	public Picklist() {
 		//default constructor for JSON serialization
+		
+		lines = new ArrayList<Pickline>();
 	}
 	
 	@Override
@@ -66,15 +68,9 @@ public class Picklist {
 		this.lines = lines;
 	}
 	public void addLine(Pickline line) {
-		if (lines == null) {
-			lines = new ArrayList<Pickline>();
-		}
 		lines.add(line);
 	}
 	public void addLines(List<Pickline> lines) {
-		if (this.lines == null) {
-			this.lines = new ArrayList<Pickline>(lines.size());
-		}
 		this.lines.addAll(lines);
 	}
 	

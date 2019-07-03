@@ -135,13 +135,14 @@ public class Pickline {
 		//assume the params Object is a Map, because it's deserialized this way
 		@SuppressWarnings("unchecked")
 		Map<String, Object> parameterMap = (Map<String, Object>) params;
-
+		
 		Pickline line = new Pickline();
 		line.setIdent((String) parameterMap.get("ident"));
 		line.setLocation((String) parameterMap.get("location"));
 		line.setItem((String) parameterMap.get("item"));
 		line.setQuantity((Double) parameterMap.get("quantity"));
-		line.setStatus((String) parameterMap.get("status")); 
+		line.setUnit((String) parameterMap.get("unit"));
+		line.setStatus((String) parameterMap.get("status"));
 		
 		return line;
 	}
