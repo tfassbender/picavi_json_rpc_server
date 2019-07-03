@@ -25,6 +25,53 @@ public class Credentials {
 		return "Credentials [user=" + user + ", password=" + password + ", station=" + station + ", deviceIdent=" + deviceIdent + "]";
 	}
 	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((deviceIdent == null) ? 0 : deviceIdent.hashCode());
+		result = prime * result + ((password == null) ? 0 : password.hashCode());
+		result = prime * result + ((station == null) ? 0 : station.hashCode());
+		result = prime * result + ((user == null) ? 0 : user.hashCode());
+		return result;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Credentials other = (Credentials) obj;
+		if (deviceIdent == null) {
+			if (other.deviceIdent != null)
+				return false;
+		}
+		else if (!deviceIdent.equals(other.deviceIdent))
+			return false;
+		if (password == null) {
+			if (other.password != null)
+				return false;
+		}
+		else if (!password.equals(other.password))
+			return false;
+		if (station == null) {
+			if (other.station != null)
+				return false;
+		}
+		else if (!station.equals(other.station))
+			return false;
+		if (user == null) {
+			if (other.user != null)
+				return false;
+		}
+		else if (!user.equals(other.user))
+			return false;
+		return true;
+	}
+	
 	public String getUser() {
 		return user;
 	}

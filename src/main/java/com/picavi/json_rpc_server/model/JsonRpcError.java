@@ -37,6 +37,42 @@ public class JsonRpcError {
 		return "JsonRpcError [code=" + code + ", message=" + message + ", data=" + data + "]";
 	}
 	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + code;
+		result = prime * result + ((data == null) ? 0 : data.hashCode());
+		result = prime * result + ((message == null) ? 0 : message.hashCode());
+		return result;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		JsonRpcError other = (JsonRpcError) obj;
+		if (code != other.code)
+			return false;
+		if (data == null) {
+			if (other.data != null)
+				return false;
+		}
+		else if (!data.equals(other.data))
+			return false;
+		if (message == null) {
+			if (other.message != null)
+				return false;
+		}
+		else if (!message.equals(other.message))
+			return false;
+		return true;
+	}
+	
 	public JsonRpcError(int code, String message, Object data) {
 		this.code = code;
 		this.message = message;

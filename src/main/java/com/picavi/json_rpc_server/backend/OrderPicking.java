@@ -38,6 +38,7 @@ public class OrderPicking {
 		
 		//or return a dummy picklist because there is no database...
 		Picklist picklist = new Picklist();
+		picklist.setIdent("picklist_42");
 		picklist.addLine(new Pickline("1", "somewhere", "unicorn", 42, "a_unit", "fluffy"));
 		picklist.addLine(new Pickline("2", "somewhere_else", "Beer", Double.POSITIVE_INFINITY, "Barels", "cold"));
 		picklist.addLine(new Pickline("3", "Coruscant", "Lightsaber", 5, "picks", "cool"));
