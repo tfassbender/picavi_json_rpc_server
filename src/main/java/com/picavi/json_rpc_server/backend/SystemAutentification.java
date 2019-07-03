@@ -3,6 +3,8 @@ package com.picavi.json_rpc_server.backend;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.google.common.annotations.VisibleForTesting;
+
 public class SystemAutentification {
 	
 	private Logger LOGGER = LogManager.getLogger(SystemAutentification.class);
@@ -51,7 +53,8 @@ public class SystemAutentification {
 	/**
 	 * Create a session id for a user that is logging in
 	 */
-	private String generateSessionId() {
+	@VisibleForTesting
+	/*private*/ String generateSessionId() {
 		//create a secure and well chosen session id here
 		
 		//or just create a random session id...

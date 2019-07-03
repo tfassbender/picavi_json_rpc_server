@@ -16,6 +16,39 @@ public class PicklistRequestParameters {
 		return "PicklistRequestParameters [sessionId=" + sessionId + ", pickingListIdent=" + pickingListIdent + "]";
 	}
 	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((pickingListIdent == null) ? 0 : pickingListIdent.hashCode());
+		result = prime * result + ((sessionId == null) ? 0 : sessionId.hashCode());
+		return result;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PicklistRequestParameters other = (PicklistRequestParameters) obj;
+		if (pickingListIdent == null) {
+			if (other.pickingListIdent != null)
+				return false;
+		}
+		else if (!pickingListIdent.equals(other.pickingListIdent))
+			return false;
+		if (sessionId == null) {
+			if (other.sessionId != null)
+				return false;
+		}
+		else if (!sessionId.equals(other.sessionId))
+			return false;
+		return true;
+	}
+	
 	public PicklistRequestParameters(String sessionId, String pickingListIdent) {
 		this.sessionId = sessionId;
 		this.pickingListIdent = pickingListIdent;

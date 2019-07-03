@@ -16,6 +16,39 @@ public class JsonRpcLoginAnswer {
 		return "JsonRpcLoginAnswer [sessionId=" + sessionId + ", configuration=" + configuration + "]";
 	}
 	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((configuration == null) ? 0 : configuration.hashCode());
+		result = prime * result + ((sessionId == null) ? 0 : sessionId.hashCode());
+		return result;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		JsonRpcLoginAnswer other = (JsonRpcLoginAnswer) obj;
+		if (configuration == null) {
+			if (other.configuration != null)
+				return false;
+		}
+		else if (!configuration.equals(other.configuration))
+			return false;
+		if (sessionId == null) {
+			if (other.sessionId != null)
+				return false;
+		}
+		else if (!sessionId.equals(other.sessionId))
+			return false;
+		return true;
+	}
+	
 	public JsonRpcLoginAnswer(String sessionId, Configuration configuration) {
 		this.sessionId = sessionId;
 		this.configuration = configuration;

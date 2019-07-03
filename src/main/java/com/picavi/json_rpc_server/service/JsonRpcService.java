@@ -38,9 +38,37 @@ public class JsonRpcService {
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response processRequest(JsonRpcRequest request) {
+	public Response processRequestSynchrone(JsonRpcRequest request) {
 		LOGGER.info("received (synchrone) request: {}", request);
 		
+		return processRequest(request);
+	}
+	
+	@POST
+	@Path("/async")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response processRequestAsynchrone(JsonRpcRequest request) {
+		LOGGER.info("received (asynchrone) request: {}", request);
+		
+		try {
+			//return the request asynchrone using a completable future
+			return CompletableFuture.supplyAsync(() -> processRequest(request)).get();
+		}
+		catch (InterruptedException | ExecutionException e) {
+			LOGGER.error("The asynchrone execution of the request failed", e);
+			
+			//return an unknown error because this exceptions should never occur
+			return JsonRpcErrorUtil.createErrorResponse(request.getId());
+		}
+	}
+	
+	/**
+	 * Process any request by delegating it to the method that is to be called.
+	 * 
+	 * @return Returns a {@link Response} to the processed request.
+	 */
+	private Response processRequest(JsonRpcRequest request) {
 		//execute the requested method
 		switch (request.getMethod()) {
 			case "system.login":
@@ -56,36 +84,9 @@ public class JsonRpcService {
 		return JsonRpcErrorUtil.createMethodNotFoundErrorResponse(request.getId(), request.getMethod());
 	}
 	
-	@POST
-	@Path("/async")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response processRequestAsync(JsonRpcRequest request) {
-		LOGGER.info("received (asynchrone) request: {}", request);
-		
-		//execute the requested method
-		try {
-			switch (request.getMethod()) {
-				case "system.login":
-					return CompletableFuture.supplyAsync(() -> processLogin(request)).get();
-				case "system.logout":
-					return CompletableFuture.supplyAsync(() -> processLogout(request)).get();
-				case "orderPicking.getPickingList":
-					return CompletableFuture.supplyAsync(() -> processGetPickingList(request)).get();
-			}
-		}
-		catch (InterruptedException | ExecutionException e) {
-			LOGGER.error("The asynchrone execution of the request failed", e);
-			
-			//return an unknown error because this exceptions should never occur
-			return JsonRpcErrorUtil.createErrorResponse(request.getId());
-		}
-		
-		//if the method is none of the above return an error
-		LOGGER.warn("the request could not be processed, because the method name is unknown: {}", request.getMethod());
-		return JsonRpcErrorUtil.createMethodNotFoundErrorResponse(request.getId(), request.getMethod());
-	}
-	
+	/**
+	 * Process the login and return a {@link Response} including a {@link JsonRpcResponse} that contains the {@link JsonRpcLoginAnswer}
+	 */
 	private Response processLogin(JsonRpcRequest request) {
 		LOGGER.info("processing login request");
 		//get the login information
@@ -122,6 +123,9 @@ public class JsonRpcService {
 		return Response.status(Status.OK).entity(response).build();
 	}
 	
+	/**
+	 * Process the logout and return a {@link Response} including a {@link JsonRpcResponse}
+	 */
 	private Response processLogout(JsonRpcRequest request) {
 		LOGGER.info("Processing logout request");
 		
@@ -157,6 +161,9 @@ public class JsonRpcService {
 		return Response.status(Status.OK).entity(response).build();
 	}
 	
+	/**
+	 * Process the pickingList request and return a {@link Response} including a {@link JsonRpcResponse} that contains the {@link Picklist}
+	 */
 	private Response processGetPickingList(JsonRpcRequest request) {
 		LOGGER.info("Processing picklist request");
 		
